@@ -6,7 +6,7 @@ type Props = {
 };
 
 const Button = ({ label }: Props) => {
-  return <button>{label}</button>;
+  return <button className="test">{label}</button>;
 };
 
 export default Button;

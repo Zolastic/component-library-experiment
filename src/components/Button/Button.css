@@ -1,8 +1,12 @@
-button {
+.test {
   background-color: #007bff;
   color: white;
   padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+}
+
+button {
+  font-size: 60px;
 }

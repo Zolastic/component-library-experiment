@@ -1,6 +1,6 @@
 {
   "name": "zolastic-component-library-experiment",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Learning how to make a component library",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
