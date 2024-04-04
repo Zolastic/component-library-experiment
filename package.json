@@ -1,6 +1,6 @@
 {
   "name": "zolastic-component-library-experiment",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Learning how to make a component library",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -39,6 +39,7 @@
     "@swc/core": "^1.4.12",
     "@types/react": "^18.2.74",
     "rollup": "^4.14.0",
+    "rollup-plugin-postcss": "^4.0.2",
     "typescript": "^5.4.3"
   },
   "main": "dist/cjs/index.js",
