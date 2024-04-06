@@ -1,10 +1,11 @@
 {
   "name": "zolastic-component-library-experiment",
-  "version": "1.0.7",
+  "version": "1.0.11",
   "description": "Learning how to make a component library",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup src/index.ts --format cjs,esm --dts --minify --sourcemap",
+    "build:styles": "postcss src/components/styles.css -o dist/styles.css",
+    "build:ts": "tsup src/index.ts --format cjs,esm --dts --minify --sourcemap",
+    "build": "npm run build:ts && npm run build:styles",
     "rollup": "rollup -c --bundleConfigAsCjs"
   },
   "repository": {
@@ -39,8 +40,12 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "@swc/core": "^1.4.12",
     "@types/react": "^18.2.74",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.0",
     "rollup": "^4.14.0",
     "rollup-plugin-postcss": "^4.0.2",
+    "tailwindcss": "^3.4.3",
     "typescript": "^5.4.3"
   },
   "main": "dist/index.js",
