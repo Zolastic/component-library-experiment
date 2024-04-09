@@ -7,52 +7,50 @@ import { Badge } from "../Badge/Badge";
 import { Command, CommandGroup, CommandItem } from "./Command";
 import { Command as CommandPrimitive } from "cmdk";
 
+import "../styles.css";
+
 type Item = Record<"value" | "label", string>;
 
-const ITEMS = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-  {
-    value: "wordpress",
-    label: "WordPress",
-  },
-  {
-    value: "express.js",
-    label: "Express.js",
-  },
-  {
-    value: "nest.js",
-    label: "Nest.js",
-  },
-] satisfies Item[];
+type MultiSelectProps = {
+  items: Item[];
+  selectedItems?: Item[];
+  placeholder?: string;
+  onSelect?: (value: string) => void;
+  onUnselect?: (value: string) => void;
+};
 
-const MultiSelect = () => {
+const MultiSelect = ({
+  items,
+  selectedItems,
+  placeholder = "Select items...",
+  onSelect,
+  onUnselect,
+}: MultiSelectProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<Item[]>([ITEMS[4]]);
+  const [selected, setSelected] = React.useState<Item[]>(selectedItems ?? []);
+  const [selectables, setSelectables] = React.useState<Item[]>([]);
   const [inputValue, setInputValue] = React.useState("");
 
-  const handleUnselect = React.useCallback((item: Item) => {
-    setSelected((prev) => prev.filter((s) => s.value !== item.value));
-  }, []);
+  const handleUnselect = React.useCallback(
+    (item: Item) => {
+      setSelected((prev) => prev.filter((s) => s.value !== item.value));
+      if (onUnselect) {
+        onUnselect(item.value);
+      }
+    },
+    [onUnselect]
+  );
+
+  const handleSelect = React.useCallback(
+    (item: Item) => {
+      setSelected((prev) => [...prev, item]);
+      if (onSelect) {
+        onSelect(item.value);
+      }
+    },
+    [onSelect]
+  );
 
   const handleKeyDown = React.useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -76,7 +74,15 @@ const MultiSelect = () => {
     []
   );
 
-  const selectables = ITEMS.filter((item) => !selected.includes(item));
+  React.useEffect(() => {
+    setSelectables(
+      items.filter((item) => {
+        return !selected.some(
+          (selectedItem) => selectedItem.value === item.value
+        );
+      })
+    );
+  }, [items, selected]);
 
   return (
     <Command
@@ -118,14 +124,14 @@ const MultiSelect = () => {
             onValueChange={setInputValue}
             onBlur={() => setOpen(false)}
             onFocus={() => setOpen(true)}
-            placeholder="Select items..."
+            placeholder={selected.length > 0 ? "" : placeholder}
             className="ml-2 bg-transparent outline-none placeholder:text-grey-400 flex-1"
           />
         </div>
       </div>
       <div className="relative mt-2">
         {open && selectables.length > 0 ? (
-          <div className="absolute w-full z-10 top-0 rounded-md border bg-popover text-text-default shadow-md outline-none animate-in">
+          <div className="absolute w-full z-10 top-0 rounded-md border bg-popover text-text-default shadow-md outline-none animate-in max-h-96 overflow-y-auto zolastic-component-library-experiment-select-content">
             <CommandGroup className="h-full overflow-auto">
               {selectables.map((item) => {
                 return (
@@ -136,8 +142,7 @@ const MultiSelect = () => {
                       e.stopPropagation();
                     }}
                     onSelect={(value) => {
-                      setInputValue("");
-                      setSelected((prev) => [...prev, item]);
+                      handleSelect(item);
                     }}
                     className={"cursor-pointer"}
                   >
