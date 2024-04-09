@@ -37,13 +37,13 @@ const MyComponent = () => {
 To ensure the styling of the components in Zolastic Component Library Experiment works correctly, you need to import the provided CSS file into your project.
 
 ```javascript
-import "zolastic-component-library-experiment/dist/styles.css";
+import "zolastic-component-library-experiment/dist/index.css";
 ```
 ```JSX
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import "zolastic-component-library-experiment/dist/styles.css";
+import "zolastic-component-library-experiment/dist/index.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -72,6 +72,68 @@ Currently, the library includes the following components:
 - Button
 - Select
 - More components will be added in the future.
+
+### Select Component
+
+#### Normal Select
+```JSX
+import React from "react";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "zolastic-component-library-experiment";
+
+const SelectDemo = () => {
+  return (
+    <Select>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Theme" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="light">Light</SelectItem>
+        <SelectItem value="dark">Dark</SelectItem>
+        <SelectItem value="system">System</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+};
+
+export default SelectDemo;
+```
+#### Select with TanStack Virtual
+```JSX
+import React from "react";
+
+import {
+  Select,
+  SelectContentTanStackVirtual,
+  SelectTrigger,
+  SelectValue,
+} from "zolastic-component-library-experiment";
+
+const SelectTanStackVirtualDemo = () => {
+  const data = Array.from({ length: 15 }, (_, i) => ({
+    label: `Option ${i + 1}`,
+    value: `option-${i + 1}`,
+  }));
+
+  return (
+    <Select>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder="Options" />
+      </SelectTrigger>
+      <SelectContentTanStackVirtual data={data} />
+    </Select>
+  );
+};
+
+export default SelectTanStackVirtualDemo;
+
+```
 
 ## Contributing
 
