@@ -2,8 +2,11 @@
 
 import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
+import * as ScrollArea from "@radix-ui/react-scroll-area";
 import { Check, ChevronDown, ChevronUp } from "lucide-react";
 import "../styles.css";
+
+import { useVirtualizer } from "@tanstack/react-virtual";
 
 import { cn } from "../../lib/utils";
 
@@ -53,7 +56,7 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-t-sm rounded-b-lg border bg-white text-text-default shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-lg border bg-white text-text-default shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         position === "popper" &&
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         position === "popper" &&
@@ -63,21 +66,65 @@ const SelectContent = React.forwardRef<
       position={position}
       {...props}
     >
-      {/* <SelectScrollUpButton />
-      <SelectPrimitive.Viewport
-        className={cn(
-          "p-1",
-          position === "popper" &&
-            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
-        )}
-      > */}
-      {children}
-      {/* </SelectPrimitive.Viewport>
-      <SelectScrollDownButton /> */}
+      <ScrollArea.Root
+        className="zolastic-component-library-experiment-select-scroll-area-root"
+        type="auto"
+      >
+        <SelectPrimitive.Viewport className={cn("p-1")}>
+          <ScrollArea.Viewport className="zolastic-component-library-experiment-select-scroll-area-viewport">
+            {children}
+          </ScrollArea.Viewport>
+        </SelectPrimitive.Viewport>
+        <ScrollArea.Scrollbar
+          className="zolastic-component-library-experiment-select-scroll-area-scrollbar"
+          orientation="vertical"
+        >
+          <ScrollArea.Thumb className="zolastic-component-library-experiment-select-scroll-area-thumb" />
+        </ScrollArea.Scrollbar>
+      </ScrollArea.Root>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
+
+type SelectContentTanStackVirtualProps = React.ComponentPropsWithoutRef<
+  typeof SelectPrimitive.Content
+> & {
+  data: { label: string; value: string }[];
+};
+
+const SelectContentTanStackVirtual = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Content>,
+  SelectContentTanStackVirtualProps
+>(({ className, children, position = "popper", data, ...props }, ref) => {
+  const parentRef = React.useRef<HTMLDivElement>(null);
+  const rowVirtualizer = useVirtualizer({
+    count: data.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 35,
+  });
+
+  return (
+    <div
+      ref={parentRef}
+      className="overflow-auto"
+      style={{
+        height: `${rowVirtualizer.getTotalSize()}px`,
+      }}
+    >
+      <SelectContent ref={ref} className="h-96 w-full relative">
+        {rowVirtualizer.getVirtualItems().map((virtualItem) => (
+          <div key={virtualItem.key}>
+            <SelectItem value={data[virtualItem.index].value}>
+              {data[virtualItem.index].label}
+            </SelectItem>
+          </div>
+        ))}
+      </SelectContent>
+    </div>
+  );
+});
+SelectContentTanStackVirtual.displayName = SelectContent.displayName;
 
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
@@ -172,4 +219,5 @@ export {
   SelectSeparator,
   SelectScrollUpButton,
   SelectScrollDownButton,
+  SelectContentTanStackVirtual,
 };
