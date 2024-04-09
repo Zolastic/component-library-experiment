@@ -1,6 +1,6 @@
 {
   "name": "zolastic-component-library-experiment",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Learning how to make a component library",
   "scripts": {
     "build:styles": "postcss src/components/styles.css -o dist/styles.css",
