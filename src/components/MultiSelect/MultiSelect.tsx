@@ -15,6 +15,8 @@ type MultiSelectProps = {
   items: Item[];
   selectedItems?: Item[];
   placeholder?: string;
+  badgeVariant?: "default" | "primary" | "secondary";
+  width?: React.CSSProperties["width"];
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
 };
@@ -23,6 +25,8 @@ const MultiSelect = ({
   items,
   selectedItems,
   placeholder = "Select items...",
+  badgeVariant = "default",
+  width = "512px",
   onSelect,
   onUnselect,
 }: MultiSelectProps) => {
@@ -87,7 +91,8 @@ const MultiSelect = ({
   return (
     <Command
       onKeyDown={handleKeyDown}
-      className="overflow-visible bg-transparent w-[512px]"
+      className="overflow-visible bg-transparent"
+      style={{ width }}
     >
       <div
         className="rounded-lg border border-grey-300 bg-white px-3 py-2 text-sm 
@@ -97,7 +102,7 @@ const MultiSelect = ({
         <div className="flex gap-1 flex-wrap">
           {selected.map((item) => {
             return (
-              <Badge key={item.value} variant="secondary">
+              <Badge key={item.value} variant={badgeVariant}>
                 {item.label}
                 <button
                   className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
