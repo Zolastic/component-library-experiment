@@ -17,6 +17,8 @@ type MultiSelectProps = {
   placeholder?: string;
   badgeVariant?: "default" | "primary" | "secondary";
   width?: React.CSSProperties["width"];
+  inputScrollable?: boolean;
+  inputMaxHeight?: React.CSSProperties["height"];
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
 };
@@ -27,6 +29,8 @@ const MultiSelect = ({
   placeholder = "Select items...",
   badgeVariant = "default",
   width = "512px",
+  inputScrollable = false,
+  inputMaxHeight = "40px",
   onSelect,
   onUnselect,
 }: MultiSelectProps) => {
@@ -97,7 +101,11 @@ const MultiSelect = ({
       <div
         className="rounded-lg border border-grey-300 bg-white px-3 py-2 text-sm 
       ring-offset-grey-300 placeholder:text-grey focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-20 focus:border-primary-active 
-      disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-grey-100 [&>span]:line-clamp-1"
+      disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-grey-100 [&>span]:line-clamp-1 zolastic-component-library-experiment-select-content"
+        style={{
+          height: inputScrollable ? inputMaxHeight : "auto",
+          overflow: inputScrollable ? "auto" : "hidden",
+        }}
       >
         <div className="flex gap-1 flex-wrap">
           {selected.map((item) => {
