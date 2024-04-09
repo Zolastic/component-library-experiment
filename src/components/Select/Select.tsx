@@ -87,44 +87,126 @@ const SelectContent = React.forwardRef<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
-type SelectContentTanStackVirtualProps = React.ComponentPropsWithoutRef<
+type VirtualizedSelectContentProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Content
 > & {
-  data: { label: string; value: string }[];
+  height: React.CSSProperties["height"];
+  items: { label: string; value: string }[];
+  virtualizerOptions?: VirtualizerOptions;
 };
 
-const SelectContentTanStackVirtual = React.forwardRef<
+const VirtualizedSelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
-  SelectContentTanStackVirtualProps
->(({ className, children, position = "popper", data, ...props }, ref) => {
-  const parentRef = React.useRef<HTMLDivElement>(null);
-  const rowVirtualizer = useVirtualizer({
-    count: data.length,
-    getScrollElement: () => parentRef.current,
-    estimateSize: () => 35,
-  });
+  VirtualizedSelectContentProps
+>(({ height, items, virtualizerOptions }, ref) => {
+  const [filteredItems, setFilteredItems] = React.useState(items);
+  const parentRef = React.useRef(null);
+
+  // Virtualizer logic
+  const _virtualizerOptions =
+    virtualizerOptions === undefined
+      ? {
+          count: filteredItems.length,
+          getScrollElement: () => parentRef.current,
+          estimateSize: () => 35,
+          overscan: 5,
+        }
+      : {
+          ...virtualizerOptions,
+          count: filteredItems.length,
+          getScrollElement: () => parentRef.current,
+        };
+  const virtualizer = useVirtualizer(_virtualizerOptions);
+  const virtualItems = virtualizer.getVirtualItems();
 
   return (
-    <div
-      ref={parentRef}
-      className="overflow-auto"
-      style={{
-        height: `${rowVirtualizer.getTotalSize()}px`,
-      }}
-    >
-      <SelectContent ref={ref} className="h-96 w-full relative">
-        {rowVirtualizer.getVirtualItems().map((virtualItem) => (
-          <div key={virtualItem.key}>
-            <SelectItem value={data[virtualItem.index].value}>
-              {data[virtualItem.index].label}
-            </SelectItem>
-          </div>
-        ))}
-      </SelectContent>
-    </div>
+    <SelectPrimitive.Portal>
+      <SelectPrimitive.Content
+        className={cn(
+          "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-lg border bg-white text-text-default shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+          "w-full min-w-[var(--radix-select-trigger-width)] overflow-y-auto max-h-96 zolastic-component-library-experiment-select-content"
+        )}
+        position={"popper"}
+      >
+        <SelectPrimitive.Viewport className="SelectViewport">
+          <SelectPrimitive.Group
+            ref={parentRef}
+            style={{
+              height: height,
+              width: "100%",
+              overflow: "auto",
+            }}
+          >
+            <div
+              style={{
+                height: `${virtualizer.getTotalSize()}px`,
+                width: "100%",
+                position: "relative",
+              }}
+            >
+              {virtualItems.map((item) => (
+                <SelectPrimitive.Item
+                  key={filteredItems[item.index].value}
+                  value={filteredItems[item.index].value}
+                  className={cn(
+                    "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-primary-accent focus:text-text-default data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+                  )}
+                >
+                  <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                    <SelectPrimitive.ItemIndicator>
+                      <Check className="h-4 w-4" color="#98A2B3" />
+                    </SelectPrimitive.ItemIndicator>
+                  </span>
+                  <SelectPrimitive.ItemText>
+                    {filteredItems[item.index].label}
+                  </SelectPrimitive.ItemText>
+                </SelectPrimitive.Item>
+              ))}
+            </div>
+          </SelectPrimitive.Group>
+        </SelectPrimitive.Viewport>
+      </SelectPrimitive.Content>
+    </SelectPrimitive.Portal>
   );
 });
-SelectContentTanStackVirtual.displayName = SelectContent.displayName;
+VirtualizedSelectContent.displayName = SelectContent.displayName;
+
+type VirtualizedSelectProps = {
+  items: { label: string; value: string }[];
+  height?: React.CSSProperties["height"];
+  placeholderText?: string;
+  onSelect?: (value: string) => void;
+  virtualizerOptions?: VirtualizerOptions;
+};
+
+type UseVirtualizerParam = Parameters<typeof useVirtualizer>[0];
+// need to remove count and getScrollElement from VirtualizedComboboxVirtualizerOptions
+export type VirtualizerOptions = Omit<
+  UseVirtualizerParam,
+  "count" | "getScrollElement"
+>;
+
+const VirtualizedSelect = ({
+  height = "400px",
+  items,
+  placeholderText = "No item selected.",
+  onSelect,
+  virtualizerOptions,
+}: VirtualizedSelectProps) => {
+  return (
+    <Select>
+      <SelectTrigger className="w-[180px]">
+        <SelectValue placeholder={placeholderText} />
+      </SelectTrigger>
+      <VirtualizedSelectContent
+        height={height}
+        items={items}
+        virtualizerOptions={virtualizerOptions}
+      />
+    </Select>
+  );
+};
 
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
@@ -179,7 +261,8 @@ export {
   SelectValue,
   SelectTrigger,
   SelectContent,
-  SelectContentTanStackVirtual,
+  VirtualizedSelectContent,
+  VirtualizedSelect,
   SelectLabel,
   SelectItem,
   SelectSeparator,
