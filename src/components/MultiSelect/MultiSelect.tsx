@@ -22,6 +22,7 @@ type MultiSelectProps = {
   selectContentMaxHeight?: React.CSSProperties["height"];
   inputScrollable?: boolean;
   maxSelectedItems?: number;
+  hidePlaceholderWhenSelected?: boolean;
   onMaxSelected?: (maxLimit: number) => void;
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
@@ -38,6 +39,7 @@ const MultiSelect = ({
   selectContentMaxHeight = "384px",
   inputScrollable = false,
   maxSelectedItems = Number.MAX_SAFE_INTEGER,
+  hidePlaceholderWhenSelected = false,
   onMaxSelected,
   onSelect,
   onUnselect,
@@ -158,7 +160,11 @@ const MultiSelect = ({
             onValueChange={setInputValue}
             onBlur={() => setOpen(false)}
             onFocus={() => setOpen(true)}
-            placeholder={selected.length > 0 ? "" : placeholderText}
+            placeholder={
+              hidePlaceholderWhenSelected && selected.length > 0
+                ? ""
+                : placeholderText
+            }
             className="ml-2 bg-transparent outline-none placeholder:text-grey-400 flex-1"
           />
         </div>
