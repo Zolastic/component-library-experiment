@@ -14,25 +14,28 @@ type Item = Record<"value" | "label", string>;
 type MultiSelectProps = {
   items: Item[];
   selectedItems?: Item[];
-  placeholder?: string;
+  placeholderText?: string;
+  notFoundText?: string;
   badgeVariant?: "default" | "primary" | "secondary";
   width?: React.CSSProperties["width"];
   inputScrollable?: boolean;
   inputMaxHeight?: React.CSSProperties["height"];
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
+  onOpen?: (open: boolean) => void;
 };
 
 const MultiSelect = ({
   items,
   selectedItems,
-  placeholder = "Select items...",
+  placeholderText = "Select items...",
   badgeVariant = "default",
   width = "512px",
   inputScrollable = false,
   inputMaxHeight = "40px",
   onSelect,
   onUnselect,
+  onOpen,
 }: MultiSelectProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
@@ -92,6 +95,12 @@ const MultiSelect = ({
     );
   }, [items, selected]);
 
+  React.useEffect(() => {
+    if (onOpen) {
+      onOpen(open);
+    }
+  }, [open, onOpen]);
+
   return (
     <Command
       onKeyDown={handleKeyDown}
@@ -137,7 +146,7 @@ const MultiSelect = ({
             onValueChange={setInputValue}
             onBlur={() => setOpen(false)}
             onFocus={() => setOpen(true)}
-            placeholder={selected.length > 0 ? "" : placeholder}
+            placeholder={selected.length > 0 ? "" : placeholderText}
             className="ml-2 bg-transparent outline-none placeholder:text-grey-400 flex-1"
           />
         </div>
