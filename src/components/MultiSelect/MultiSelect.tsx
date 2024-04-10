@@ -18,8 +18,9 @@ type MultiSelectProps = {
   notFoundText?: string;
   badgeVariant?: "default" | "primary" | "secondary";
   width?: React.CSSProperties["width"];
+  inputHeight?: React.CSSProperties["height"];
+  selectContentMaxHeight?: React.CSSProperties["height"];
   inputScrollable?: boolean;
-  inputMaxHeight?: React.CSSProperties["height"];
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
   onOpen?: (open: boolean) => void;
@@ -31,8 +32,9 @@ const MultiSelect = ({
   placeholderText = "Select items...",
   badgeVariant = "default",
   width = "512px",
+  inputHeight = "40px",
+  selectContentMaxHeight = "384px",
   inputScrollable = false,
-  inputMaxHeight = "40px",
   onSelect,
   onUnselect,
   onOpen,
@@ -112,7 +114,7 @@ const MultiSelect = ({
       ring-offset-grey-300 placeholder:text-grey focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-20 focus:border-primary-active 
       disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-grey-100 [&>span]:line-clamp-1 zolastic-component-library-experiment-select-content"
         style={{
-          height: inputScrollable ? inputMaxHeight : "auto",
+          height: inputScrollable ? inputHeight : "auto",
           overflow: inputScrollable ? "auto" : "hidden",
         }}
       >
@@ -153,7 +155,12 @@ const MultiSelect = ({
       </div>
       <div className="relative mt-2">
         {open && selectables.length > 0 ? (
-          <div className="absolute w-full z-10 top-0 rounded-md border bg-popover text-text-default shadow-md outline-none animate-in max-h-96 overflow-y-auto zolastic-component-library-experiment-select-content">
+          <div
+            className="absolute w-full z-10 top-0 rounded-md border bg-popover text-text-default shadow-md outline-none animate-in max-h-96 overflow-y-auto zolastic-component-library-experiment-select-content"
+            style={{
+              maxHeight: selectContentMaxHeight,
+            }}
+          >
             <CommandGroup className="h-full overflow-auto">
               {selectables.map((item) => {
                 return (
