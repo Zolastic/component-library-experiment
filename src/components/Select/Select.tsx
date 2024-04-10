@@ -87,10 +87,12 @@ const SelectContent = React.forwardRef<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
+type SelectContentTanStackVirtualItem = { label: string; value: string };
+
 type SelectContentTanStackVirtualProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Content
 > & {
-  data: { label: string; value: string }[];
+  data: SelectContentTanStackVirtualItem[];
 };
 
 const SelectContentTanStackVirtual = React.forwardRef<
@@ -179,6 +181,7 @@ export {
   SelectValue,
   SelectTrigger,
   SelectContent,
+  SelectContentTanStackVirtualItem,
   SelectContentTanStackVirtual,
   SelectLabel,
   SelectItem,

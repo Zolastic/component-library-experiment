@@ -10,11 +10,11 @@ import { Command as CommandPrimitive } from "cmdk";
 import "../styles.css";
 import { cn } from "../../lib/utils";
 
-type Item = Record<"value" | "label", string>;
+type MultiSelectItem = Record<"value" | "label", string>;
 
 type MultiSelectProps = {
-  items: Item[];
-  selectedItems?: Item[];
+  items: MultiSelectItem[];
+  selectedItems?: MultiSelectItem[];
   placeholderText?: string;
   notFoundText?: string;
   badgeVariant?: "default" | "primary" | "secondary";
@@ -52,12 +52,14 @@ const MultiSelect = ({
 }: MultiSelectProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<Item[]>(selectedItems ?? []);
-  const [selectables, setSelectables] = React.useState<Item[]>([]);
+  const [selected, setSelected] = React.useState<MultiSelectItem[]>(
+    selectedItems ?? []
+  );
+  const [selectables, setSelectables] = React.useState<MultiSelectItem[]>([]);
   const [inputValue, setInputValue] = React.useState("");
 
   const handleUnselect = React.useCallback(
-    (item: Item) => {
+    (item: MultiSelectItem) => {
       if (!disabled) {
         setSelected((prev) => prev.filter((s) => s.value !== item.value));
         if (onUnselect) {
@@ -69,7 +71,7 @@ const MultiSelect = ({
   );
 
   const handleSelect = React.useCallback(
-    (item: Item) => {
+    (item: MultiSelectItem) => {
       if (disabled) return;
       if (selected.length >= maxSelectedItems) {
         if (onMaxSelected) {
@@ -231,4 +233,4 @@ const MultiSelect = ({
   );
 };
 
-export default MultiSelect;
+export { MultiSelectItem, MultiSelect };
