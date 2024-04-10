@@ -26,6 +26,7 @@ type MultiSelectProps = {
   maxSelectedItems?: number;
   hidePlaceholderWhenSelected?: boolean;
   disabled?: boolean;
+  defaultOpen?: boolean;
   onMaxSelected?: (maxLimit: number) => void;
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
@@ -45,13 +46,14 @@ const MultiSelect = ({
   maxSelectedItems = Number.MAX_SAFE_INTEGER,
   hidePlaceholderWhenSelected = false,
   disabled = false,
+  defaultOpen = false,
   onMaxSelected,
   onSelect,
   onUnselect,
   onOpen,
 }: MultiSelectProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(defaultOpen);
   const [selected, setSelected] = React.useState<MultiSelectItem[]>(
     selectedItems ?? []
   );
@@ -108,6 +110,12 @@ const MultiSelect = ({
     },
     []
   );
+
+  React.useEffect(() => {
+    if (selectedItems) {
+      setSelected(selectedItems);
+    }
+  }, [selectedItems]);
 
   React.useEffect(() => {
     setSelectables(
@@ -202,7 +210,9 @@ const MultiSelect = ({
       <div className="relative mt-2">
         {open && selectables.length > 0 ? (
           <div
-            className="absolute w-full z-10 top-0 rounded-md border bg-popover text-text-default shadow-md outline-none animate-in max-h-96 overflow-y-auto zolastic-component-library-experiment-select-content"
+            className={`absolute w-full z-10 top-0 rounded-md border bg-popover text-text-default shadow-md outline-none animate-in max-h-96 overflow-y-auto zolastic-component-library-experiment-select-content ${
+              disabled ? "cursor-not-allowed opacity-50" : ""
+            }`}
             style={{
               maxHeight: selectContentMaxHeight,
             }}
@@ -219,7 +229,9 @@ const MultiSelect = ({
                     onSelect={(value) => {
                       handleSelect(item);
                     }}
-                    className={"cursor-pointer"}
+                    className={
+                      disabled ? "cursor-not-allowed" : "cursor-pointer"
+                    }
                   >
                     {item.label}
                   </CommandItem>

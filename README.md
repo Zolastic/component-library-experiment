@@ -198,11 +198,11 @@ export default MultiSelectDemo;
 | maxSelectedItems        | The maximum number of items that can be selected.                                                     |
 | hidePlaceholderWhenSelected | A boolean indicating whether to hide the placeholder text when items are selected.                 |
 | disabled                | A boolean indicating whether the MultiSelect component is disabled.                                   |
+| defaultOpen             | A boolean indicating whether the dropdown should be open by default.                                   |
 | onMaxSelected           | An optional callback function invoked when the maximum number of items is selected.                   |
 | onSelect                | A callback function is invoked when an item is selected.                                                 |
 | onUnselect              | A callback function is invoked when an item is unselected.                                               |
 | onOpen                  | A callback function is invoked when the dropdown is opened or closed.                                     |
-
 
 ## Contributing
 
