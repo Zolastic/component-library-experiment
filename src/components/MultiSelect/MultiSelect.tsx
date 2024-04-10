@@ -130,9 +130,14 @@ const MultiSelect = ({
       style={{ width }}
     >
       <div
-        className="rounded-lg border border-grey-300 bg-white px-3 py-2 text-sm 
-      ring-offset-grey-300 placeholder:text-grey focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-20 focus:border-primary-active 
-      disabled:cursor-not-allowed data-[disabled]:opacity-50 data-[disabled]:bg-grey-100 data-[disabled]:cursor-not-allowed [&>span]:line-clamp-1 zolastic-component-library-experiment-select-content"
+        className={`
+        rounded-lg border border-grey-300 bg-white px-3 py-2 text-sm 
+        ring-offset-grey-300 placeholder:text-grey focus:outline-none 
+        focus:ring-2 focus:ring-primary focus:ring-opacity-20 
+        focus:border-primary-active
+        ${disabled ? "cursor-not-allowed opacity-50 bg-grey-100" : ""}
+        [&>span]:line-clamp-1 zolastic-component-library-experiment-select-content
+      `}
         style={{
           height: inputScrollable ? inputHeight : "auto",
           overflow: inputScrollable ? "auto" : "hidden",
@@ -149,7 +154,11 @@ const MultiSelect = ({
               >
                 {item.label}
                 <button
-                  className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 data-[disabled]:cursor-not-allowed"
+                  className={`
+                  ml-1 ring-offset-background rounded-full outline-none 
+                  focus:ring-2 focus:ring-ring focus:ring-offset-2
+                  ${disabled ? "cursor-not-allowed" : ""}
+                `}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       handleUnselect(item);
@@ -179,8 +188,10 @@ const MultiSelect = ({
                 ? ""
                 : placeholderText
             }
-            className="ml-2 bg-transparent outline-none placeholder:text-grey-400 flex-1
-            data-[disabled]:cursor-not-allowed"
+            className={`
+            ml-2 bg-transparent outline-none placeholder:text-grey-400 flex-1
+            ${disabled ? "cursor-not-allowed" : ""}
+          `}
             disabled={disabled}
             data-disabled={disabled}
           />
