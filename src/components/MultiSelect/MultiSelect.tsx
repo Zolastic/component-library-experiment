@@ -21,6 +21,8 @@ type MultiSelectProps = {
   inputHeight?: React.CSSProperties["height"];
   selectContentMaxHeight?: React.CSSProperties["height"];
   inputScrollable?: boolean;
+  maxSelectedItems?: number;
+  onMaxSelected?: (maxLimit: number) => void;
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
   onOpen?: (open: boolean) => void;
@@ -35,6 +37,8 @@ const MultiSelect = ({
   inputHeight = "40px",
   selectContentMaxHeight = "384px",
   inputScrollable = false,
+  maxSelectedItems = Number.MAX_SAFE_INTEGER,
+  onMaxSelected,
   onSelect,
   onUnselect,
   onOpen,
@@ -57,12 +61,18 @@ const MultiSelect = ({
 
   const handleSelect = React.useCallback(
     (item: Item) => {
+      if (selected.length >= maxSelectedItems) {
+        if (onMaxSelected) {
+          onMaxSelected(maxSelectedItems);
+        }
+        return;
+      }
       setSelected((prev) => [...prev, item]);
       if (onSelect) {
         onSelect(item.value);
       }
     },
-    [onSelect]
+    [maxSelectedItems, onMaxSelected, onSelect, selected]
   );
 
   const handleKeyDown = React.useCallback(
