@@ -75,7 +75,7 @@ Currently, the library includes the following components:
 
 ### Select Component
 
-#### Normal Select
+#### Select
 ```JSX
 import React from "react";
 
@@ -104,6 +104,21 @@ const SelectDemo = () => {
 
 export default SelectDemo;
 ```
+
+| Component         | Description                                                                                           |
+|-------------------|-------------------------------------------------------------------------------------------------------|
+| SelectTrigger     | The trigger component of the `<Select>` dropdown.                                                      |
+| SelectValue       | The component used to display the selected value.                                                      |
+| SelectContent     | The content component of the `<Select>` dropdown, containing selectable options.                      |
+| SelectItem        | Individual selectable item within the `<SelectContent>`.                                                |
+
+| Prop Name         | Description                                                                                           |
+|-------------------|-------------------------------------------------------------------------------------------------------|
+| onValueChange     | A callback function is invoked when the selected value changes. Receives the newly selected value as an argument. |
+| defaultValue      | The default value of the `<Select>` component.                                                        |
+| disabled          | A boolean indicating whether the `<Select>` component is disabled.                                     |
+| placeholder       | The placeholder text is displayed when no option is selected. (Used in the `<SelectValue>` component)    |
+
 #### Select with TanStack Virtual
 ```JSX
 import React from "react";
@@ -111,15 +126,19 @@ import React from "react";
 import {
   Select,
   SelectContentTanStackVirtual,
+  SelectContentTanStackVirtualItem,
   SelectTrigger,
   SelectValue,
 } from "zolastic-component-library-experiment";
 
 const SelectTanStackVirtualDemo = () => {
-  const data = Array.from({ length: 15 }, (_, i) => ({
-    label: `Option ${i + 1}`,
-    value: `option-${i + 1}`,
-  }));
+  const data: SelectContentTanStackVirtualItem[] = Array.from(
+    { length: 15 },
+    (_, i) => ({
+      label: `Option ${i + 1}`,
+      value: `option-${i + 1}`,
+    })
+  );
 
   return (
     <Select>
@@ -132,8 +151,58 @@ const SelectTanStackVirtualDemo = () => {
 };
 
 export default SelectTanStackVirtualDemo;
-
 ```
+| Component         | Description                                                                                           |
+|-------------------|-------------------------------------------------------------------------------------------------------|
+| SelectTrigger                 | The trigger component of the `<Select>` dropdown.                                                      |
+| SelectValue                   | The component used to display the selected value.                                                      |
+| SelectContentTanStackVirtual  | The content component of the `<Select>` dropdown, containing selectable options.            |
+
+| Prop Name | Description                                                                                         |
+|-----------|-----------------------------------------------------------------------------------------------------|
+| data      | An array of objects representing the options to be displayed in the `<SelectContentTanStackVirtual>`. Each object should have `label` and `value` properties. |
+
+#### MultiSelect
+```JSX
+import React from "react";
+import {
+  MultiSelect,
+  MultiSelectItem,
+} from "zolastic-component-library-experiment";
+
+type Props = {};
+
+const MultiSelectDemo = (props: Props) => {
+  const data: MultiSelectItem[] = Array.from({ length: 100 }, (_, i) => ({
+    label: `Option ${i + 1}`,
+    value: `option-${i + 1}`,
+  }));
+
+  return <MultiSelect items={data} />;
+};
+
+export default MultiSelectDemo;
+```
+| Prop Name               | Description                                                                                          |
+|-------------------------|------------------------------------------------------------------------------------------------------|
+| items                   | An array of objects representing the selectable items in the dropdown. Each object should have `label` and `value` properties. |
+| selectedItems           | An optional array of objects representing the initially selected items in the dropdown.              |
+| placeholderText         | The text to display as a placeholder when no item is selected.                                        |
+| notFoundText            | Optional text to display when no items are found in the dropdown.                                      |
+| badgeVariant            | The variant of the badge used to display selected items. Can be one of "default", "primary", or "secondary". |
+| badgeClassName          | Optional class name to be applied to the badge component.                                             |
+| width                   | The width of the MultiSelect component.                                                               |
+| inputHeight             | The height of the input field.                                                                        |
+| selectContentMaxHeight  | The maximum height of the dropdown content.                                                          |
+| inputScrollable         | A boolean indicating whether the input field should be scrollable if the content exceeds its height.  |
+| maxSelectedItems        | The maximum number of items that can be selected.                                                     |
+| hidePlaceholderWhenSelected | A boolean indicating whether to hide the placeholder text when items are selected.                 |
+| disabled                | A boolean indicating whether the MultiSelect component is disabled.                                   |
+| onMaxSelected           | An optional callback function invoked when the maximum number of items is selected.                   |
+| onSelect                | A callback function is invoked when an item is selected.                                                 |
+| onUnselect              | A callback function is invoked when an item is unselected.                                               |
+| onOpen                  | A callback function is invoked when the dropdown is opened or closed.                                     |
+
 
 ## Contributing
 
