@@ -210,7 +210,9 @@ const MultiSelect = ({
       <div className="relative mt-2">
         {open && selectables.length > 0 ? (
           <div
-            className="absolute w-full z-10 top-0 rounded-md border bg-popover text-text-default shadow-md outline-none animate-in max-h-96 overflow-y-auto zolastic-component-library-experiment-select-content"
+            className={`absolute w-full z-10 top-0 rounded-md border bg-popover text-text-default shadow-md outline-none animate-in max-h-96 overflow-y-auto zolastic-component-library-experiment-select-content ${
+              disabled ? "cursor-not-allowed opacity-50" : ""
+            }`}
             style={{
               maxHeight: selectContentMaxHeight,
             }}
@@ -227,7 +229,9 @@ const MultiSelect = ({
                     onSelect={(value) => {
                       handleSelect(item);
                     }}
-                    className={"cursor-pointer"}
+                    className={
+                      disabled ? "cursor-not-allowed" : "cursor-pointer"
+                    }
                   >
                     {item.label}
                   </CommandItem>
