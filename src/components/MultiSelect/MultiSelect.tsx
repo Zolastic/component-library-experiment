@@ -8,6 +8,7 @@ import { Command, CommandGroup, CommandItem } from "./Command";
 import { Command as CommandPrimitive } from "cmdk";
 
 import "../styles.css";
+import { cn } from "../../lib/utils";
 
 type Item = Record<"value" | "label", string>;
 
@@ -17,6 +18,7 @@ type MultiSelectProps = {
   placeholderText?: string;
   notFoundText?: string;
   badgeVariant?: "default" | "primary" | "secondary";
+  badgeClassName?: string;
   width?: React.CSSProperties["width"];
   inputHeight?: React.CSSProperties["height"];
   selectContentMaxHeight?: React.CSSProperties["height"];
@@ -35,6 +37,7 @@ const MultiSelect = ({
   selectedItems,
   placeholderText = "Select items...",
   badgeVariant = "default",
+  badgeClassName = "",
   width = "512px",
   inputHeight = "40px",
   selectContentMaxHeight = "384px",
@@ -139,7 +142,11 @@ const MultiSelect = ({
         <div className="flex gap-1 flex-wrap">
           {selected.map((item) => {
             return (
-              <Badge key={item.value} variant={badgeVariant}>
+              <Badge
+                key={item.value}
+                variant={badgeVariant}
+                className={cn(badgeClassName)}
+              >
                 {item.label}
                 <button
                   className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 data-[disabled]:cursor-not-allowed"
