@@ -3,7 +3,7 @@
 import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import "../styles.css";
 
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -23,14 +23,14 @@ const SelectTrigger = React.forwardRef<
     className={cn(
       `flex h-8 w-full items-center justify-between rounded-lg border border-grey-300 bg-white px-3 py-2 ring-offset-grey-300 placeholder:text-grey 
       focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-20 focus:border-primary-active 
-      disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1`,
+      disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-grey-100 [&>span]:line-clamp-1`,
       className
     )}
     {...props}
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 opacity-50" color="#98A2B3" />
+      <ChevronDown className="h-4 w-4" color="#98A2B3" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -87,10 +87,12 @@ const SelectContent = React.forwardRef<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
+type SelectContentTanStackVirtualItem = { label: string; value: string };
+
 type SelectContentTanStackVirtualProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Content
 > & {
-  data: { label: string; value: string }[];
+  data: SelectContentTanStackVirtualItem[];
 };
 
 const SelectContentTanStackVirtual = React.forwardRef<
@@ -149,41 +151,6 @@ const SelectItem = React.forwardRef<
 ));
 SelectItem.displayName = SelectPrimitive.Item.displayName;
 
-const SelectScrollUpButton = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.ScrollUpButton>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollUpButton>
->(({ className, ...props }, ref) => (
-  <SelectPrimitive.ScrollUpButton
-    ref={ref}
-    className={cn(
-      "flex cursor-default items-center justify-center py-1",
-      className
-    )}
-    {...props}
-  >
-    <ChevronUp className="h-4 w-4" color="#98A2B3" />
-  </SelectPrimitive.ScrollUpButton>
-));
-SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName;
-
-const SelectScrollDownButton = React.forwardRef<
-  React.ElementRef<typeof SelectPrimitive.ScrollDownButton>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.ScrollDownButton>
->(({ className, ...props }, ref) => (
-  <SelectPrimitive.ScrollDownButton
-    ref={ref}
-    className={cn(
-      "flex cursor-default items-center justify-center py-1",
-      className
-    )}
-    {...props}
-  >
-    <ChevronDown className="h-4 w-4" color="#98A2B3" />
-  </SelectPrimitive.ScrollDownButton>
-));
-SelectScrollDownButton.displayName =
-  SelectPrimitive.ScrollDownButton.displayName;
-
 const SelectLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
@@ -214,10 +181,9 @@ export {
   SelectValue,
   SelectTrigger,
   SelectContent,
+  SelectContentTanStackVirtualItem,
+  SelectContentTanStackVirtual,
   SelectLabel,
   SelectItem,
   SelectSeparator,
-  SelectScrollUpButton,
-  SelectScrollDownButton,
-  SelectContentTanStackVirtual,
 };
