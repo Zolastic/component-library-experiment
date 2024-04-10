@@ -26,6 +26,7 @@ type MultiSelectProps = {
   maxSelectedItems?: number;
   hidePlaceholderWhenSelected?: boolean;
   disabled?: boolean;
+  defaultOpen?: boolean;
   onMaxSelected?: (maxLimit: number) => void;
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
@@ -45,13 +46,14 @@ const MultiSelect = ({
   maxSelectedItems = Number.MAX_SAFE_INTEGER,
   hidePlaceholderWhenSelected = false,
   disabled = false,
+  defaultOpen = false,
   onMaxSelected,
   onSelect,
   onUnselect,
   onOpen,
 }: MultiSelectProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(defaultOpen);
   const [selected, setSelected] = React.useState<MultiSelectItem[]>(
     selectedItems ?? []
   );
@@ -108,6 +110,12 @@ const MultiSelect = ({
     },
     []
   );
+
+  React.useEffect(() => {
+    if (selectedItems) {
+      setSelected(selectedItems);
+    }
+  }, [selectedItems]);
 
   React.useEffect(() => {
     setSelectables(
