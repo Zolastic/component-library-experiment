@@ -23,6 +23,7 @@ type MultiSelectProps = {
   inputScrollable?: boolean;
   maxSelectedItems?: number;
   hidePlaceholderWhenSelected?: boolean;
+  disabled?: boolean;
   onMaxSelected?: (maxLimit: number) => void;
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
@@ -40,6 +41,7 @@ const MultiSelect = ({
   inputScrollable = false,
   maxSelectedItems = Number.MAX_SAFE_INTEGER,
   hidePlaceholderWhenSelected = false,
+  disabled = false,
   onMaxSelected,
   onSelect,
   onUnselect,
@@ -53,16 +55,19 @@ const MultiSelect = ({
 
   const handleUnselect = React.useCallback(
     (item: Item) => {
-      setSelected((prev) => prev.filter((s) => s.value !== item.value));
-      if (onUnselect) {
-        onUnselect(item.value);
+      if (!disabled) {
+        setSelected((prev) => prev.filter((s) => s.value !== item.value));
+        if (onUnselect) {
+          onUnselect(item.value);
+        }
       }
     },
-    [onUnselect]
+    [disabled, onUnselect]
   );
 
   const handleSelect = React.useCallback(
     (item: Item) => {
+      if (disabled) return;
       if (selected.length >= maxSelectedItems) {
         if (onMaxSelected) {
           onMaxSelected(maxSelectedItems);
@@ -124,11 +129,12 @@ const MultiSelect = ({
       <div
         className="rounded-lg border border-grey-300 bg-white px-3 py-2 text-sm 
       ring-offset-grey-300 placeholder:text-grey focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-20 focus:border-primary-active 
-      disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-grey-100 [&>span]:line-clamp-1 zolastic-component-library-experiment-select-content"
+      disabled:cursor-not-allowed data-[disabled]:opacity-50 data-[disabled]:bg-grey-100 data-[disabled]:cursor-not-allowed [&>span]:line-clamp-1 zolastic-component-library-experiment-select-content"
         style={{
           height: inputScrollable ? inputHeight : "auto",
           overflow: inputScrollable ? "auto" : "hidden",
         }}
+        data-disabled={disabled}
       >
         <div className="flex gap-1 flex-wrap">
           {selected.map((item) => {
@@ -136,7 +142,7 @@ const MultiSelect = ({
               <Badge key={item.value} variant={badgeVariant}>
                 {item.label}
                 <button
-                  className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 data-[disabled]:cursor-not-allowed"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
                       handleUnselect(item);
@@ -147,6 +153,7 @@ const MultiSelect = ({
                     e.stopPropagation();
                   }}
                   onClick={() => handleUnselect(item)}
+                  data-disabled={disabled}
                 >
                   <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
                 </button>
@@ -165,7 +172,10 @@ const MultiSelect = ({
                 ? ""
                 : placeholderText
             }
-            className="ml-2 bg-transparent outline-none placeholder:text-grey-400 flex-1"
+            className="ml-2 bg-transparent outline-none placeholder:text-grey-400 flex-1
+            data-[disabled]:cursor-not-allowed"
+            disabled={disabled}
+            data-disabled={disabled}
           />
         </div>
       </div>
