@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { X } from "lucide-react";
 
-import { Badge } from "../Badge/Badge";
+import { Tag } from "../Tag/Tag";
 import { Command, CommandGroup, CommandItem } from "./Command";
 import { Command as CommandPrimitive } from "cmdk";
 
@@ -21,7 +20,7 @@ interface MultiSelectProps {
   placeholderText?: string;
   notFoundText?: string;
   badgeVariant?: "default" | "primary" | "secondary";
-  badgeClassName?: string;
+  tagClassName?: string;
   width?: React.CSSProperties["width"];
   inputHeight?: React.CSSProperties["height"];
   dropdownMaxHeight?: React.CSSProperties["height"];
@@ -41,7 +40,7 @@ const MultiSelect = ({
   selectedItems,
   placeholderText = "Select items...",
   badgeVariant = "default",
-  badgeClassName = "",
+  tagClassName = "",
   width = "512px",
   inputHeight = "40px",
   dropdownMaxHeight = "384px",
@@ -160,33 +159,15 @@ const MultiSelect = ({
         <div className="flex gap-1 flex-wrap">
           {selected.map((item) => {
             return (
-              <Badge
+              <Tag
                 key={item.value}
                 variant={badgeVariant}
-                className={cn(badgeClassName)}
+                className={cn(tagClassName)}
+                closeable
+                onClose={() => handleUnselect(item)}
               >
                 {item.label}
-                <button
-                  className={`
-                  ml-1 ring-offset-background rounded-full outline-none 
-                  focus:ring-2 focus:ring-ring focus:ring-offset-2
-                  ${disabled ? "cursor-not-allowed" : ""}
-                `}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleUnselect(item);
-                    }
-                  }}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  onClick={() => handleUnselect(item)}
-                  data-disabled={disabled}
-                >
-                  <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                </button>
-              </Badge>
+              </Tag>
             );
           })}
           {/* Avoid having the "Search" Icon */}

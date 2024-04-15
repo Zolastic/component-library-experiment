@@ -26,4 +26,4 @@ export {
 
 export { MultiSelect, MultiSelectItem, MultiSelectProps } from "./MultiSelect";
 
-export * from "./Badge";
+export { Tag, tagVariants, TagProps } from "./Tag";
