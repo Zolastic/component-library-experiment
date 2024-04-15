@@ -24,8 +24,6 @@ export {
 } from "./Select";
 //#endregion
 
-//#region MultiSelect
-export * from "./MultiSelect";
-//#endregion
+export { MultiSelect, MultiSelectItem, MultiSelectProps } from "./MultiSelect";
 
 export * from "./Badge";
