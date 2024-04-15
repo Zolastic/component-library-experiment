@@ -10,9 +10,12 @@ import { Command as CommandPrimitive } from "cmdk";
 import "../styles.css";
 import { cn } from "../../lib/utils";
 
-type MultiSelectItem = Record<"value" | "label", string>;
+interface MultiSelectItem {
+  value: string;
+  label: string;
+}
 
-type MultiSelectProps = {
+interface MultiSelectProps {
   items: MultiSelectItem[];
   selectedItems?: MultiSelectItem[];
   placeholderText?: string;
@@ -21,7 +24,7 @@ type MultiSelectProps = {
   badgeClassName?: string;
   width?: React.CSSProperties["width"];
   inputHeight?: React.CSSProperties["height"];
-  selectContentMaxHeight?: React.CSSProperties["height"];
+  dropdownMaxHeight?: React.CSSProperties["height"];
   inputScrollable?: boolean;
   maxSelectedItems?: number;
   hidePlaceholderWhenSelected?: boolean;
@@ -31,7 +34,7 @@ type MultiSelectProps = {
   onSelect?: (value: string) => void;
   onUnselect?: (value: string) => void;
   onOpen?: (open: boolean) => void;
-};
+}
 
 const MultiSelect = ({
   items,
@@ -41,7 +44,7 @@ const MultiSelect = ({
   badgeClassName = "",
   width = "512px",
   inputHeight = "40px",
-  selectContentMaxHeight = "384px",
+  dropdownMaxHeight = "384px",
   inputScrollable = false,
   maxSelectedItems = Number.MAX_SAFE_INTEGER,
   hidePlaceholderWhenSelected = false,
@@ -214,7 +217,7 @@ const MultiSelect = ({
               disabled ? "cursor-not-allowed opacity-50" : ""
             }`}
             style={{
-              maxHeight: selectContentMaxHeight,
+              maxHeight: dropdownMaxHeight,
             }}
           >
             <CommandGroup className="h-full overflow-auto">
@@ -245,4 +248,4 @@ const MultiSelect = ({
   );
 };
 
-export { MultiSelectItem, MultiSelect };
+export { MultiSelect, MultiSelectItem, MultiSelectProps };
