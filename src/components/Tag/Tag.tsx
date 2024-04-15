@@ -26,10 +26,18 @@ const tagVariants = cva(
 interface TagProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof tagVariants> {
-  closeable?: boolean;
-  onClose?: () => void;
-  icon?: React.ReactNode; // Define the icon prop
-  disabled?: boolean;
+  closeable?: boolean; // Whether the Tag can be closed. Default is false. If true, a close button will be displayed.
+  onClose?: () => void; // Callback when the Tag is closed
+  icon?: React.ReactNode; // Icon to display alongside the Tag text. Default is null.
+  disabled?: boolean; // Whether the Tag is disabled. Default is false.
+  border?: boolean; // Whether the Tag has a border. Default is true.
+}
+
+interface CheckableTagProps extends TagProps {
+  checked?: boolean; // Whether the Tag is checked by default. Default is false.
+  checkedBackgroundColor?: string; // Background color when Tag is checked. Default is "#DDD2F0".
+  checkedTextColor?: string; // Text color when Tag is checked. Default is "#482384".
+  onClickTag?: (isChecked: boolean) => void; // Callback when the Tag is clicked
 }
 
 function Tag({
@@ -39,10 +47,19 @@ function Tag({
   disabled = false,
   onClose,
   icon = null,
+  border = true,
   ...props
 }: TagProps) {
   return (
-    <div className={cn(tagVariants({ variant }), className)} {...props}>
+    <div
+      className={cn(
+        tagVariants({ variant }),
+        className,
+        `${disabled ? "cursor-not-allowed opacity-50" : ""}`,
+        `${!border && "border-0"}`
+      )}
+      {...props}
+    >
       {icon && <span className="mr-1">{icon}</span>}
       {props.children}
       {closeable && (
@@ -71,4 +88,47 @@ function Tag({
   );
 }
 
-export { Tag, tagVariants, TagProps };
+// CheckableTag component - A tag component that can be checked. Background color changes when clicked.
+function CheckableTag({
+  checked = false,
+  checkedBackgroundColor = "#DDD2F0",
+  checkedTextColor = "#482384",
+  onClickTag,
+  className = "",
+  variant,
+  disabled = false,
+  icon = null,
+  border = false,
+  ...restProps
+}: CheckableTagProps) {
+  const [isChecked, setIsChecked] = React.useState(checked);
+
+  const handleClick = () => {
+    if (!disabled) {
+      setIsChecked(!isChecked);
+      if (onClickTag) {
+        onClickTag(!isChecked);
+      }
+    }
+  };
+
+  return (
+    <Tag
+      {...restProps}
+      onClick={handleClick}
+      role="checkbox"
+      aria-checked={checked}
+      className={cn(className, "cursor-pointer")}
+      style={{
+        backgroundColor: isChecked ? checkedBackgroundColor : "",
+        color: isChecked ? checkedTextColor : "",
+      }}
+      disabled={disabled}
+      variant={variant}
+      icon={icon}
+      border={border}
+    />
+  );
+}
+
+export { Tag, CheckableTag, tagVariants, TagProps, CheckableTagProps };

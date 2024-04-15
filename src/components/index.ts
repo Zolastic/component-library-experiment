@@ -26,4 +26,12 @@ export {
 
 export { MultiSelect, MultiSelectItem, MultiSelectProps } from "./MultiSelect";
 
-export { Tag, tagVariants, TagProps } from "./Tag";
+//#region Tag
+export {
+  Tag,
+  CheckableTag,
+  tagVariants,
+  TagProps,
+  CheckableTagProps,
+} from "./Tag";
+//#endregion
