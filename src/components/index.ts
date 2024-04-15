@@ -1,4 +1,31 @@
 export { default as Button } from "./Button";
-export * from "./Select";
+
+//#region Select
+export {
+  Select,
+  SelectGroup,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectContentTanStackVirtual,
+  SelectLabel,
+  SelectItem,
+  SelectSeparator,
+  SelectProps,
+  SelectGroupProps,
+  SelectTriggerProps,
+  SelectValueProps,
+  SelectContentProps,
+  SelectContentTanStackVirtualProps,
+  SelectItemProps,
+  SelectLabelProps,
+  SelectSeparatorProps,
+  SelectContentTanStackVirtualItem,
+} from "./Select";
+//#endregion
+
+//#region MultiSelect
 export * from "./MultiSelect";
+//#endregion
+
 export * from "./Badge";

@@ -10,13 +10,45 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 
 import { cn } from "../../lib/utils";
 
-const Select = SelectPrimitive.Root;
+//#region types
+interface SelectProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root> {}
+interface SelectGroupProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Group> {}
+interface SelectTriggerProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {}
+interface SelectValueProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value> {}
+interface SelectContentProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content> {}
+interface SelectContentTanStackVirtualProps extends SelectContentProps {
+  data: { label: string; value: string }[];
+}
+interface SelectItemProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> {}
+interface SelectLabelProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label> {}
+interface SelectSeparatorProps
+  extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator> {}
+interface SelectContentTanStackVirtualItem {
+  label: string;
+  value: string;
+}
+//#endregion
 
-const SelectGroup = SelectPrimitive.Group;
+const Select = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Root>,
+  SelectProps
+>((props) => <SelectPrimitive.Root {...props} />);
+
+const SelectGroup = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Group>,
+  SelectGroupProps
+>((props) => <SelectPrimitive.Group {...props} />);
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
+  SelectTriggerProps
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Trigger
     ref={ref}
@@ -38,7 +70,7 @@ SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 const SelectValue = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Value>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
+  SelectValueProps
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Value
     ref={ref}
@@ -50,7 +82,7 @@ SelectValue.displayName = SelectPrimitive.Value.displayName;
 
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
+  SelectContentProps
 >(({ className, children, position = "popper", ...props }, ref) => (
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
@@ -87,14 +119,6 @@ const SelectContent = React.forwardRef<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
-type SelectContentTanStackVirtualItem = { label: string; value: string };
-
-type SelectContentTanStackVirtualProps = React.ComponentPropsWithoutRef<
-  typeof SelectPrimitive.Content
-> & {
-  data: SelectContentTanStackVirtualItem[];
-};
-
 const SelectContentTanStackVirtual = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   SelectContentTanStackVirtualProps
@@ -130,7 +154,7 @@ SelectContentTanStackVirtual.displayName = SelectContent.displayName;
 
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
+  SelectItemProps
 >(({ className, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
@@ -153,7 +177,7 @@ SelectItem.displayName = SelectPrimitive.Item.displayName;
 
 const SelectLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Label>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
+  SelectLabelProps
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
@@ -165,7 +189,7 @@ SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
 const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Separator>
+  SelectSeparatorProps
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
     ref={ref}
@@ -181,9 +205,18 @@ export {
   SelectValue,
   SelectTrigger,
   SelectContent,
-  SelectContentTanStackVirtualItem,
   SelectContentTanStackVirtual,
   SelectLabel,
   SelectItem,
   SelectSeparator,
+  SelectProps,
+  SelectGroupProps,
+  SelectTriggerProps,
+  SelectValueProps,
+  SelectContentProps,
+  SelectContentTanStackVirtualProps,
+  SelectItemProps,
+  SelectLabelProps,
+  SelectSeparatorProps,
+  SelectContentTanStackVirtualItem,
 };
