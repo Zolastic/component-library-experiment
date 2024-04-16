@@ -6,6 +6,8 @@
     "build:styles": "postcss src/components/styles.css -o dist/styles.css",
     "build:ts": "tsup src/index.ts --format cjs,esm --dts --minify --sourcemap",
     "build": "npm run build:ts",
+    "changeset:add": "changeset add",
+    "changeset:version": "changeset version",
     "rollup": "rollup -c --bundleConfigAsCjs"
   },
   "repository": {
