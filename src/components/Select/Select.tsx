@@ -39,12 +39,12 @@ interface SelectContentTanStackVirtualItem {
 const Select = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Root>,
   SelectProps
->((props) => <SelectPrimitive.Root {...props} />);
+>((props, _ref) => <SelectPrimitive.Root {...props} />);
 
 const SelectGroup = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Group>,
   SelectGroupProps
->((props) => <SelectPrimitive.Group {...props} />);
+>((props, _ref) => <SelectPrimitive.Group {...props} />);
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
