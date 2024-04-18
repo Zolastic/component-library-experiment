@@ -3,7 +3,7 @@
 import React from "react";
 
 import { Tag } from "../Tag/Tag";
-import { Command, CommandGroup, CommandItem } from "./Command";
+import { Command, CommandGroup, CommandItem, CommandProps } from "./Command";
 import { Command as CommandPrimitive } from "cmdk";
 
 import "../styles.css";
@@ -14,7 +14,7 @@ interface MultiSelectItem {
   label: string;
 }
 
-interface MultiSelectProps {
+interface MultiSelectProps extends CommandProps {
   items: MultiSelectItem[];
   selectedItems?: MultiSelectItem[];
   placeholderText?: string;
@@ -30,8 +30,8 @@ interface MultiSelectProps {
   disabled?: boolean;
   defaultOpen?: boolean;
   onMaxSelected?: (maxLimit: number) => void;
-  onSelect?: (value: string) => void;
-  onUnselect?: (value: string) => void;
+  onSelectItem?: (item: MultiSelectItem) => void;
+  onUnselectItem?: (item: MultiSelectItem) => void;
   onOpen?: (open: boolean) => void;
 }
 
@@ -50,8 +50,8 @@ const MultiSelect = ({
   disabled = false,
   defaultOpen = false,
   onMaxSelected,
-  onSelect,
-  onUnselect,
+  onSelectItem,
+  onUnselectItem,
   onOpen,
 }: MultiSelectProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -66,12 +66,12 @@ const MultiSelect = ({
     (item: MultiSelectItem) => {
       if (!disabled) {
         setSelected((prev) => prev.filter((s) => s.value !== item.value));
-        if (onUnselect) {
-          onUnselect(item.value);
+        if (onUnselectItem) {
+          onUnselectItem(item);
         }
       }
     },
-    [disabled, onUnselect]
+    [disabled, onUnselectItem]
   );
 
   const handleSelect = React.useCallback(
@@ -84,11 +84,11 @@ const MultiSelect = ({
         return;
       }
       setSelected((prev) => [...prev, item]);
-      if (onSelect) {
-        onSelect(item.value);
+      if (onSelectItem) {
+        onSelectItem(item);
       }
     },
-    [maxSelectedItems, onMaxSelected, onSelect, selected]
+    [maxSelectedItems, onMaxSelected, onSelectItem, selected]
   );
 
   const handleKeyDown = React.useCallback(
