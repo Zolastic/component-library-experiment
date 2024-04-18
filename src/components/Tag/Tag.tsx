@@ -15,6 +15,8 @@ const tagVariants = cva(
           "border-primary-active bg-primary-accent text-primary hover:bg-primary-accent/50",
         secondary:
           "border-secondary-active bg-secondary-accent text-secondary hover:bg-secondary-accent/50",
+        transparentBackground:
+          "border-transparent bg-transparent text-text-default hover:bg-grey-300",
       },
     },
     defaultVariants: {
@@ -95,7 +97,7 @@ function CheckableTag({
   checkedTextColor = "#482384",
   onClickTag,
   className = "",
-  variant,
+  variant = "transparentBackground",
   disabled = false,
   icon = null,
   border = false,
