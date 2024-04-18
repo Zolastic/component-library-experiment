@@ -15,31 +15,31 @@ interface MultiSelectItem {
 }
 
 interface MultiSelectProps extends CommandProps {
-  items: MultiSelectItem[];
-  selectedItems?: MultiSelectItem[];
-  placeholderText?: string;
-  notFoundText?: string;
-  badgeVariant?: "default" | "primary" | "secondary";
-  tagClassName?: string;
-  width?: React.CSSProperties["width"];
-  inputHeight?: React.CSSProperties["height"];
-  dropdownMaxHeight?: React.CSSProperties["height"];
-  inputScrollable?: boolean;
-  maxSelectedItems?: number;
-  hidePlaceholderWhenSelected?: boolean;
-  disabled?: boolean;
-  defaultOpen?: boolean;
-  onMaxSelected?: (maxLimit: number) => void;
-  onSelectItem?: (item: MultiSelectItem) => void;
-  onUnselectItem?: (item: MultiSelectItem) => void;
-  onOpen?: (open: boolean) => void;
+  items: MultiSelectItem[]; // Array of items to be displayed in the multi-select
+  selectedItems?: MultiSelectItem[]; // Array of initially selected items
+  placeholderText?: string; // Placeholder text displayed when no items are selected
+  notFoundText?: string; // Text displayed when no items match the search criteria
+  tagVariant?: "default" | "primary" | "secondary"; // Variant for the tag displayed for selected items
+  tagClassName?: string; // Additional class name for the tag component
+  width?: React.CSSProperties["width"]; // Width of the multi-select
+  inputHeight?: React.CSSProperties["height"]; // Height of the input field
+  dropdownMaxHeight?: React.CSSProperties["height"]; // Maximum height of the dropdown
+  inputScrollable?: boolean; // Whether the input field should be scrollable
+  maxSelectedItems?: number; // Maximum number of items that can be selected
+  hidePlaceholderWhenSelected?: boolean; // Whether to hide the placeholder when items are selected
+  disabled?: boolean; // Whether the multi-select is disabled
+  defaultOpen?: boolean; // Whether the dropdown should be open by default
+  onMaxSelected?: (maxLimit: number) => void; // Callback when the maximum number of items is reached
+  onSelectItem?: (item: MultiSelectItem) => void; // Callback when an item is selected
+  onUnselectItem?: (item: MultiSelectItem) => void; // Callback when an item is unselected
+  onOpen?: (open: boolean) => void; // Callback when the dropdown is opened or closed
 }
 
 const MultiSelect = ({
   items,
   selectedItems,
   placeholderText = "Select items...",
-  badgeVariant = "default",
+  tagVariant = "default",
   tagClassName = "",
   width = "512px",
   inputHeight = "40px",
@@ -161,7 +161,7 @@ const MultiSelect = ({
             return (
               <Tag
                 key={item.value}
-                variant={badgeVariant}
+                variant={tagVariant}
                 className={cn(tagClassName)}
                 closeable
                 onClose={() => handleUnselect(item)}
