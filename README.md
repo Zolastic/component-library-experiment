@@ -204,6 +204,57 @@ export default MultiSelectDemo;
 | onUnselect              | A callback function is invoked when an item is unselected.                                               |
 | onOpen                  | A callback function is invoked when the dropdown is opened or closed.                                     |
 
+### Tag Component
+
+#### Tag
+```JSX
+import React from "react";
+import { Tag } from "zolastic-component-library-experiment";
+
+const TagDemo = () => {
+  return <Tag>Tag</Tag>;
+};
+
+export default TagDemo;
+```
+
+| Prop Name | Description                                                                                      |
+|-----------|--------------------------------------------------------------------------------------------------|
+| className               | Additional CSS classes to apply to the tag container.                                                     |
+| variant                 | The variant of the tag. Can be one of `"default"`, `"primary"`, or `"secondary"`.                                |
+| closeable | Whether the Tag can be closed. Default is `false`. If `true`, a close button will be displayed. |
+| onClose   | Callback when the Tag is closed.                                                                 |
+| icon      | Icon to display alongside the Tag text. Default is `null`.                                        |
+| disabled  | Whether the Tag is disabled. Default is `false`.                                                  |
+| border    | Whether the Tag has a border. Default is `true`.                                                   |
+
+
+### Checkable Tag
+```JSX
+import React from "react";
+import { CheckableTag } from "zolastic-component-library-experiment";
+
+const CheckableTagDemo = () => {
+  return <CheckableTag>CheckableTag</CheckableTag>;
+};
+
+export default CheckableTagDemo;
+```
+| Prop Name            | Description                                                                                                          |
+|----------------------|----------------------------------------------------------------------------------------------------------------------|
+| className               | Additional CSS classes to apply to the tag container.                                                     |
+| variant                 | The variant of the tag. Can be one of `"default"`, `"primary"`, or `"secondary"`.                                |
+| checked              | Whether the Tag is checked by default. Default is `false`.                                                           |
+| checkedBackgroundColor | Background color when Tag is checked. Default is `"#DDD2F0"`.                                                         |
+| checkedTextColor     | Text color when Tag is checked. Default is `"#482384"`.                                                               |
+| onClickTag           | Callback when the Tag is clicked.                                                                                   |
+| closeable | Whether the Tag can be closed. Default is `false`. If `true`, a close button will be displayed. |
+| onClose   | Callback when the Tag is closed.                                                                 |
+| icon      | Icon to display alongside the Tag text. Default is `null`.                                        |
+| disabled  | Whether the Tag is disabled. Default is `false`.                                                  |
+| border    | Whether the Tag has a border. Default is `true`.                                                   |
+
+
 ## Contributing
 
 As this is a learning project, contributions are not currently being accepted. However, you're welcome to fork the project and make your own modifications.
