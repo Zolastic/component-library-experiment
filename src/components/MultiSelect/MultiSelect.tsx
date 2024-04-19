@@ -1,55 +1,57 @@
 "use client";
 
-import * as React from "react";
-import { X } from "lucide-react";
+import React from "react";
 
-import { Badge } from "../Badge/Badge";
-import { Command, CommandGroup, CommandItem } from "./Command";
+import { Tag } from "../Tag/Tag";
+import { Command, CommandGroup, CommandItem, CommandProps } from "./Command";
 import { Command as CommandPrimitive } from "cmdk";
 
 import "../styles.css";
 import { cn } from "../../lib/utils";
 
-type MultiSelectItem = Record<"value" | "label", string>;
+interface MultiSelectItem {
+  value: string;
+  label: string;
+}
 
-type MultiSelectProps = {
-  items: MultiSelectItem[];
-  selectedItems?: MultiSelectItem[];
-  placeholderText?: string;
-  notFoundText?: string;
-  badgeVariant?: "default" | "primary" | "secondary";
-  badgeClassName?: string;
-  width?: React.CSSProperties["width"];
-  inputHeight?: React.CSSProperties["height"];
-  selectContentMaxHeight?: React.CSSProperties["height"];
-  inputScrollable?: boolean;
-  maxSelectedItems?: number;
-  hidePlaceholderWhenSelected?: boolean;
-  disabled?: boolean;
-  defaultOpen?: boolean;
-  onMaxSelected?: (maxLimit: number) => void;
-  onSelect?: (value: string) => void;
-  onUnselect?: (value: string) => void;
-  onOpen?: (open: boolean) => void;
-};
+interface MultiSelectProps extends CommandProps {
+  items: MultiSelectItem[]; // Array of items to be displayed in the multi-select
+  selectedItems?: MultiSelectItem[]; // Array of initially selected items
+  placeholderText?: string; // Placeholder text displayed when no items are selected
+  notFoundText?: string; // Text displayed when no items match the search criteria
+  tagVariant?: "default" | "primary" | "secondary"; // Variant for the tag displayed for selected items
+  tagClassName?: string; // Additional class name for the tag component
+  width?: React.CSSProperties["width"]; // Width of the multi-select
+  inputHeight?: React.CSSProperties["height"]; // Height of the input field
+  dropdownMaxHeight?: React.CSSProperties["height"]; // Maximum height of the dropdown
+  inputScrollable?: boolean; // Whether the input field should be scrollable
+  maxSelectedItems?: number; // Maximum number of items that can be selected
+  hidePlaceholderWhenSelected?: boolean; // Whether to hide the placeholder when items are selected
+  disabled?: boolean; // Whether the multi-select is disabled
+  defaultOpen?: boolean; // Whether the dropdown should be open by default
+  onMaxSelected?: (maxLimit: number) => void; // Callback when the maximum number of items is reached
+  onSelectItem?: (item: MultiSelectItem) => void; // Callback when an item is selected
+  onUnselectItem?: (item: MultiSelectItem) => void; // Callback when an item is unselected
+  onOpen?: (open: boolean) => void; // Callback when the dropdown is opened or closed
+}
 
 const MultiSelect = ({
   items,
   selectedItems,
   placeholderText = "Select items...",
-  badgeVariant = "default",
-  badgeClassName = "",
+  tagVariant = "default",
+  tagClassName = "",
   width = "512px",
   inputHeight = "40px",
-  selectContentMaxHeight = "384px",
+  dropdownMaxHeight = "384px",
   inputScrollable = false,
   maxSelectedItems = Number.MAX_SAFE_INTEGER,
   hidePlaceholderWhenSelected = false,
   disabled = false,
   defaultOpen = false,
   onMaxSelected,
-  onSelect,
-  onUnselect,
+  onSelectItem,
+  onUnselectItem,
   onOpen,
 }: MultiSelectProps) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -64,12 +66,12 @@ const MultiSelect = ({
     (item: MultiSelectItem) => {
       if (!disabled) {
         setSelected((prev) => prev.filter((s) => s.value !== item.value));
-        if (onUnselect) {
-          onUnselect(item.value);
+        if (onUnselectItem) {
+          onUnselectItem(item);
         }
       }
     },
-    [disabled, onUnselect]
+    [disabled, onUnselectItem]
   );
 
   const handleSelect = React.useCallback(
@@ -82,11 +84,11 @@ const MultiSelect = ({
         return;
       }
       setSelected((prev) => [...prev, item]);
-      if (onSelect) {
-        onSelect(item.value);
+      if (onSelectItem) {
+        onSelectItem(item);
       }
     },
-    [maxSelectedItems, onMaxSelected, onSelect, selected]
+    [maxSelectedItems, onMaxSelected, onSelectItem, selected]
   );
 
   const handleKeyDown = React.useCallback(
@@ -157,33 +159,15 @@ const MultiSelect = ({
         <div className="flex gap-1 flex-wrap">
           {selected.map((item) => {
             return (
-              <Badge
+              <Tag
                 key={item.value}
-                variant={badgeVariant}
-                className={cn(badgeClassName)}
+                variant={tagVariant}
+                className={cn(tagClassName)}
+                closeable
+                onClose={() => handleUnselect(item)}
               >
                 {item.label}
-                <button
-                  className={`
-                  ml-1 ring-offset-background rounded-full outline-none 
-                  focus:ring-2 focus:ring-ring focus:ring-offset-2
-                  ${disabled ? "cursor-not-allowed" : ""}
-                `}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleUnselect(item);
-                    }
-                  }}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  onClick={() => handleUnselect(item)}
-                  data-disabled={disabled}
-                >
-                  <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                </button>
-              </Badge>
+              </Tag>
             );
           })}
           {/* Avoid having the "Search" Icon */}
@@ -214,7 +198,7 @@ const MultiSelect = ({
               disabled ? "cursor-not-allowed opacity-50" : ""
             }`}
             style={{
-              maxHeight: selectContentMaxHeight,
+              maxHeight: dropdownMaxHeight,
             }}
           >
             <CommandGroup className="h-full overflow-auto">
@@ -245,4 +229,4 @@ const MultiSelect = ({
   );
 };
 
-export { MultiSelectItem, MultiSelect };
+export { MultiSelect, MultiSelectItem, MultiSelectProps };

@@ -1,13 +1,16 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 import { Command as CommandPrimitive } from "cmdk";
 
 import { cn } from "../../lib/utils";
 
+interface CommandProps
+  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive> {}
+
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive>
+  CommandProps
 >(({ className, ...props }, ref) => (
   <CommandPrimitive
     ref={ref}
@@ -51,4 +54,4 @@ const CommandItem = React.forwardRef<
 ));
 CommandItem.displayName = CommandPrimitive.Item.displayName;
 
-export { Command, CommandGroup, CommandItem };
+export { Command, CommandGroup, CommandItem, CommandProps };
